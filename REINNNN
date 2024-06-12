@@ -1,0 +1,170 @@
+-- Key settings
+local requiredKey = "troybab0y"  -- The required key
+local isKeyEntered = false
+local debounce = false
+local isOpen = true -- Track if the GUI is open or closed
+local isESPEnabled = false -- Track if ESP is enabled
+
+-- Create the GUI for the key entry
+local ScreenGui = Instance.new("ScreenGui")
+local BudlatKey = Instance.new("Frame")
+local Title = Instance.new("TextLabel")
+local TextBox = Instance.new("TextBox")
+local TextButton = Instance.new("TextButton")
+local InstructionLabel = Instance.new("TextLabel")
+local Box = Instance.new("Frame") -- New frame for the colored box
+local BoxTitle = Instance.new("TextLabel") -- New text label for the box title
+local ToggleButton = Instance.new("TextButton")
+local DragArea = Instance.new("Frame") -- Draggable area
+local OpenCloseButton = Instance.new("TextButton")
+local ToggleESPButton = Instance.new("TextButton") -- New button for toggling ESP
+
+ScreenGui.Parent = game.CoreGui
+
+local dragInput, dragStart, startPos, dragging
+
+-- Function to make the GUI draggable
+local function updateDrag(input)
+    local delta = input.Position - dragStart
+    BudlatKey.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+end
+
+BudlatKey.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragging = true
+        dragStart = input.Position
+        startPos = BudlatKey.Position
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then
+                dragging = false
+            end
+        end)
+    end
+end)
+
+BudlatKey.InputChanged:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseMovement then
+        dragInput = input
+    end
+end)
+
+-- Draggable area
+DragArea.Parent = BudlatKey
+DragArea.BackgroundColor3 = Color3.new(1, 0, 0) -- Red, just for visibility
+DragArea.Size = UDim2.new(1, 0, 0, 30) -- Same width as the frame, 30 pixels height
+DragArea.Position = UDim2.new(0, 0, 0, 0) -- At the top-left corner
+
+-- Toggle button to load the script
+ToggleButton.Parent = BudlatKey
+ToggleButton.BackgroundColor3 = Color3.new(0.8, 0.8, 0.8)
+ToggleButton.Position = UDim2.new(0.5, -50, 0.7, -15) -- Centered inside the yellow box
+ToggleButton.Size = UDim2.new(0, 100, 0, 30)
+ToggleButton.Text = "Toggle Script"
+ToggleButton.TextColor3 = Color3.new(0, 0, 0)
+ToggleButton.Visible = false
+ToggleButton.MouseButton1Click:Connect(function()
+    if debounce == false and isKeyEntered then
+        debounce = true
+        loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))()
+        wait(1) -- Delay for 1 second
+        debounce = false
+    end
+end)
+
+-- Open/Close Button
+OpenCloseButton.Parent = ScreenGui
+OpenCloseButton.BackgroundColor3 = Color3.fromRGB(194, 178, 128) -- Sand color
+OpenCloseButton.Position = UDim2.new(0, 10, 0, 10) -- Top-left corner with some padding
+OpenCloseButton.Size = UDim2.new(0, 100, 0, 30)
+OpenCloseButton.Text = "ZALDYYY" -- Changed text
+OpenCloseButton.TextColor3 = Color3.new(0, 0, 0)
+OpenCloseButton.MouseButton1Click:Connect(function()
+    isOpen = not isOpen
+    if isOpen then
+        BudlatKey.Visible = true
+        OpenCloseButton.Text = "ZALDYYY" -- Changed text
+    else
+        BudlatKey.Visible = false
+        OpenCloseButton.Text = "Open GUI"
+    end
+end)
+
+-- Toggle ESP Button
+ToggleESPButton.Parent = BudlatKey
+ToggleESPButton.BackgroundColor3 = Color3.new(0.8, 0.8, 0.8)
+ToggleESPButton.Position = UDim2.new(0.5, -50, 0.8, -15) -- Adjust position
+ToggleESPButton.Size = UDim2.new(0, 100, 0, 30)
+ToggleESPButton.Text = "Toggle ESP"
+ToggleESPButton.TextColor3 = Color3.new(0, 0, 0)
+ToggleESPButton.MouseButton1Click:Connect(function()
+    isESPEnabled = not isESPEnabled
+    if isESPEnabled then
+        loadstring(game:HttpGet("https://pastebin.com/raw/3e6iQ0sT"))() -- Load ESP script
+        ToggleESPButton.Text = "ESP Enabled"
+    else
+        -- Disable ESP script (not implemented)
+        ToggleESPButton.Text = "Toggle ESP"
+    end
+end)
+
+BudlatKey.Parent = ScreenGui
+BudlatKey.BackgroundColor3 = Color3.fromRGB(194, 178, 128) -- Sand color
+BudlatKey.Position = UDim2.new(0.5, -200, 0.3, -150) -- Adjusted position to be centered and a bit higher
+BudlatKey.Size = UDim2.new(0, 400, 0, 300) -- Larger size
+
+-- Title "CREATED BY REIN" at the top
+Title.Parent = BudlatKey
+Title.BackgroundColor3 = Color3.fromRGB(64, 64, 64) -- Dark gray color
+Title.Size = UDim2.new(0, 270, 0, 30)
+Title.Position = UDim2.new(0, 0, 0, 0)
+Title.Text = "CREATED BY REIN"
+Title.TextColor3 = Color3.fromRGB(255, 255, 255) -- White text color
+Title.TextSize = 18
+
+InstructionLabel.Parent = BudlatKey
+InstructionLabel.BackgroundColor3 = Color3.fromRGB(194, 178, 128) -- Sand color for consistency
+InstructionLabel.Size = UDim2.new(0, 400, 0, 30)
+InstructionLabel.Position = UDim2.new(0, 0, 0.4, -15) -- Adjusted position to move it slightly further up
+InstructionLabel.Text = "BUTANG ANG YAWI DIRI BOANG"
+InstructionLabel.TextColor3 = Color3.fromRGB(64, 64, 64) -- Adjusted color
+InstructionLabel.TextSize = 14
+
+-- Colored box behind the text "BUTANG ANG YAWI DIRI BOANG"
+Box.Parent = BudlatKey
+Box.BackgroundColor3 = Color3.new(0, 0.749, 1) -- Sky blue color
+Box.Size = UDim2.new(0, InstructionLabel.TextBounds.X + 10, 0, InstructionLabel.TextBounds.Y + 10) -- Adjusted size to fit the text and provide padding
+Box.Position = UDim2.new(0.5, -((InstructionLabel.TextBounds.X + 10) / 2), 0.4, -((InstructionLabel.TextBounds.Y + 10) / 2)) -- Adjusted position to center it behind the text
+
+-- Title inside the sky blue-colored box
+BoxTitle.Parent = Box
+BoxTitle.BackgroundTransparency = 1
+BoxTitle.Size = UDim2.new(1, 0, 1, 0)
+BoxTitle.Position = UDim2.new(0, 0, 0, 0)
+BoxTitle.Text = "BUTANG ANG YAWI DIRI BOANG"
+BoxTitle.TextColor3 = Color3.new(1, 1, 1)
+BoxTitle.TextSize = 14
+
+-- TextBox with text "ARI ANG YAWI AMAW"
+TextBox.Parent = BudlatKey
+TextBox.BackgroundColor3 = Color3.new(1, 1, 1)
+TextBox.Position = UDim2.new(0.5, -180, 0.6, -15) -- Adjusted position to add a bit of space at the top
+TextBox.Size = UDim2.new(0, 360, 0, 30)
+TextBox.PlaceholderText = "ARI ANG YAWI AMAW"
+
+TextButton.Parent = BudlatKey
+TextButton.BackgroundColor3 = Color3.new(0, 0, 1) -- Blue
+TextButton.Position = UDim2.new(0.5, -90, 0.8, -15)
+TextButton.Size = UDim2.new(0, 180, 0, 30)
+TextButton.Text = "Submit"
+TextButton.TextColor3 = Color3.new(1, 1, 1)
+TextButton.MouseButton1Click:Connect(function()
+    if TextBox.Text == requiredKey then
+        isKeyEntered = true
+        TextButton.Visible = false
+        TextBox.Visible = false
+        InstructionLabel.Visible = false
+        Box.Visible = false
+        BoxTitle.Visible = false
+        ToggleButton.Visible = true
+    end
+end)
